@@ -1,1 +1,1 @@
-# Proyecto_Elcetronica
+# Proyecto_Electronica
