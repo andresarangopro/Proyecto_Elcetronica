@@ -2,6 +2,10 @@
 //== INCLUDES
 //=========================================
 
+/** TFT */
+#include <MCUFRIEND_kbv.h>
+#include <TouchScreen.h>
+#include <Adafruit_GFX.h>
 /**RFID**/
 #include <SPI.h>
 #include <MFRC522.h>
@@ -23,7 +27,7 @@
 #define SS_PIN 53
 #define RST_PIN 49
 /**SERVO**/
-#define SERVO_PIN 2
+#define SERVO_PIN 40
 /**COOLER**/
 #define COOLER_UNO 49
 /**SENSOR PIR**/
@@ -36,9 +40,36 @@
 #define BUZZER 48
 /**LEDS**/
 #define LED_COCINA 47
+
+/** TFT **/
+MCUFRIEND_kbv tft;
+
+#define BLACK 0x0000
+#define RED 0xF800 
+#define CYAN 0x07FF 
+
+#define YP A2  
+#define XM A1
+#define YM 6 
+#define XP 7
+
+#define MINPRESSURE 1 
+#define MAXPRESSURE 1000
+
 //=========================================
 //== VARIABLES
 //=========================================
+/** TFT **/
+TouchScreen ts = TouchScreen(XP, YP, XM, YM, 654);
+
+short TS_MINX = 200; 
+short TS_MINY = 120;
+short TS_MAXX = 850;
+short TS_MAXY = 891;
+
+int X;
+int Y;
+int Z;
 /**RFID**/
 int static KEY_MASTER_CARD[] = {131,221,251,36}; //This is the stored UID
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
@@ -76,6 +107,7 @@ void setup() {
     initi2cLCD();  
     initServo();
     dht.begin();
+    initTFT();
 }
 //=========================================
 //== LOOP PROYECT
@@ -84,7 +116,8 @@ void setup() {
 void loop() {
    readCardRFID();  
    sensorUno.getStateOnce();
-   sensorDos.getStateOnce(); 
+   sensorDos.getStateOnce();
+   funTFT(); 
   
 }
 
@@ -155,6 +188,63 @@ void printSerialCardOnLCD(String cardSerial){
    lcd.setCursor(0, 1);
    lcd.print(cardSerial);
  
+}
+
+//=========================================
+//== TFT
+//=========================================
+
+void initTFT(){
+  Serial.begin(9600);
+  tft.reset();
+  uint16_t identifier = tft.readID();
+  Serial.print("ID = 0x");
+  Serial.println(identifier, HEX);
+
+  if (identifier == 0xEFEF) identifier = 0x9486;
+  
+  tft.begin(identifier);
+  tft.fillScreen(CYAN);
+}
+
+void menuTFT(){
+  tft.drawRect(40, 80, 160, 50, RED);
+  tft.setCursor(50, 90);
+  tft.setTextSize(2);
+  tft.setTextColor(BLACK);
+  tft.println("Temperatura");
+}
+
+void getXYZ(){
+  digitalWrite(13, HIGH); 
+  TSPoint p = ts.getPoint();
+  digitalWrite(13, LOW); 
+  pinMode(XM, OUTPUT); 
+  pinMode(YP, OUTPUT);
+  X = map(p.x, TS_MAXX, TS_MINX, tft.width(), 0);
+  Y = map(p.y, TS_MINY, TS_MAXY, tft.height(), 0);
+  Z = p.z;
+}
+
+void funTFT(){ 
+  menuTFT();
+  while(true){
+    getXYZ();
+    if ((X > 20 && X < 220) && (Y > 140 && Y < 185) && (Z > MINPRESSURE && Z < MAXPRESSURE)){
+      tft.fillScreen(BLACK);
+      
+      tft.setCursor(10,100);
+      tft.setTextColor(CYAN);
+      tft.println("Celcius: ");
+      tft.setCursor(10,120);
+      tft.println(readTemperatureAsCelcius(dht));
+      
+      tft.setCursor(10,200);
+      tft.setTextColor(CYAN);
+      tft.println("Farenheit: ");
+      tft.println(readTemperatureAsFarenheit(dht));
+  }
+  
 }
 
 //=========================================
