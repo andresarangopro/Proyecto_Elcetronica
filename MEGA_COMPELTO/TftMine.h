@@ -114,10 +114,17 @@ class TftMine{
 
       void funTFT(){     
         if(pressure(20, 220, 220, 260)){
+<<<<<<< HEAD
 //          temperature();
         }
         if(pressure(20, 220, 160, 200)){
          // people();
+=======
+          //temperature();
+        }
+        if(pressure(20, 220, 160, 200)){
+          //people();
+>>>>>>> refs/remotes/origin/felipe
         }
         if(pressure(20, 220, 100, 140)){
           light();
@@ -181,15 +188,24 @@ class TftMine{
       }
 
       void fan(){
+        boolean fans = true;
+        
         tft.fillScreen(BLACK);
         
         drawText(75, 5, "Aire", RED, 3);
       
         drawText(20, 60, "Caliente", CYAN, 2);
+<<<<<<< HEAD
 //        drawFillRect(50, fan1);
         
         drawText(20, 140, "Frio", CYAN, 2);
      //   drawFillRect(130, fan2);
+=======
+        drawFillRect(50, fanUnoObj);
+        
+        drawText(20, 140, "Frio", CYAN, 2);
+        drawFillRect(130, fanDosObj);
+>>>>>>> refs/remotes/origin/felipe
       
         tft.drawRect(20, 250, 100, 50, RED);
         drawText(45, 265, "Menu", CYAN, 2);
@@ -197,35 +213,42 @@ class TftMine{
         tft.drawRect(130, 250, 100, 50, RED);
         drawText(145, 265, "Update", CYAN, 2);
       
-        while(true){
+        while(fans){
           if(pressure(20, 120, 20, 70)){
             funMenu();
+            fans = false;
           }
           if(pressure(130, 230, 20, 70)){
             fan();
+            fans = false;
           }
       
+<<<<<<< HEAD
 //          ledOn(140, 180, 235, 260, led1);
       //    ledOn(155, 180, led2);
+=======
+          ledOn(235, 260);
+          ledOn(155, 180);
+>>>>>>> refs/remotes/origin/felipe
         }
       }
 
       void fanOn(int y1, int y2){
         if(y1 >= 235 && y2 <= 260){
-             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
-               fanUnoObj.changeToOppositeState();           
-               fan();
-            } 
+           if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+             fanUnoObj.changeToOppositeState();           
+             fan();
+          } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
               fanUnoObj.changeToOppositeState();   
               fan();        
           }
         }
         if(y1 >= 155 && y2 <= 180){
-             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
-               fanDosObj.changeToOppositeState();           
-               fan();
-            } 
+           if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+             fanDosObj.changeToOppositeState();           
+             fan();
+          } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
               fanDosObj.changeToOppositeState();           
               fan();
