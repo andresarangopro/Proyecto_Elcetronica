@@ -45,6 +45,9 @@
 #define LED_COCINA 30//47
 /**COOLER**/
 #define COOLER_UNO 49
+/**VENTILADOR**/
+#define FAN_UNO 32
+#define FAN_DOS 34
 
 //=========================================
 //== VARIABLES
@@ -82,8 +85,11 @@ DigitalWObject led_salaD(LED_SALA,APAGADO, "LED SALA");
 DigitalWObject led_cuartoUno(LED_CUARTO_UNO,APAGADO, "LED CUARTO UNO");
 DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
 DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
+/**VENTILADORES**/
+DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
+DigitalWObject fan_dos(FAN_DOS, APAGADO, "VENTILADOR UNO");
 /**TFT**/
-TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres);
+TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos);
 boolean paint = true;
 
 
