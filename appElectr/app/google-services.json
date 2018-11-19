@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "713201076460",
+    "firebase_url": "https://domotichome-a2154.firebaseio.com",
+    "project_id": "domotichome-a2154",
+    "storage_bucket": "domotichome-a2154.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713201076460:android:885d9fa9872e1659",
+        "android_client_info": {
+          "package_name": "com.example.hp.appelectr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713201076460-gn8v7bph5406s708q1imi094udj2n0og.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzwqcy2CzlZnuRSlJpsN2cdit9alX0RFo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

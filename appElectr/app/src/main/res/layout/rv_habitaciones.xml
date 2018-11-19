@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="10"
+    android:background="@drawable/rv_with_border_gray"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weightSum="4">
+        <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/tvPersonaNone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Personas"
+            android:background="@drawable/border_line"
+            android:textColor="@color/colorYellowIcons"
+
+            android:textSize="20dp" />
+        <TextView
+            android:gravity="center_horizontal"
+            android:id="@+id/tvTemperatura"
+            android:background="@drawable/border_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorYellowIcons"
+            android:text="Temperatura"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="8">
+            <ImageButton
+                android:layout_marginLeft="10dp"
+                android:id="@+id/btnLigth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:scaleType="fitCenter"
+                android:background="@drawable/rv_medal_border"
+                android:textColor="@color/colorAccentDark"
+                android:textSize="21dp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

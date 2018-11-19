@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activitys.Temperatura_Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Habitacion 1"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:id="@+id/tvHabUno"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Luz: Estado"
+                android:layout_weight="0.5"
+                android:id="@+id/btnLuzUno"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Habitacion 2"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:id="@+id/tvHabDos"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Luz: Estado"
+                android:layout_weight="0.5"
+                android:id="@+id/btnLuzDos"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Habitacion 3"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:id="@+id/tvHabTres"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Luz: Estado"
+                android:layout_weight="0.5"
+                android:id="@+id/btnLuzTres"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Habitacion 4"
+                android:textAlignment="center"
+                android:textSize="25dp"
+                android:id="@+id/tvHabCuatro"
+                android:layout_weight="0.5"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Luz: Estado"
+                android:layout_weight="0.5"
+                android:id="@+id/btnLuzCuatro"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
