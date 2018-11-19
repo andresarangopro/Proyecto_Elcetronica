@@ -53,15 +53,19 @@ class TftMine{
       DigitalWObject ledTresObj;
       DigitalWObject ledCuatroObj;
       DigitalWObject ledCincoObj;
+      DigitalWObject fanUnoObj;
+      DigitalWObject fanDosObj;
       
     public: 
     
-      TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj){       
+      TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj){       
         ledUnoObj = nledUnoObj;
         ledDosObj = nledDosObj;
         ledTresObj = nledTresObj;
         ledCuatroObj = nledCuatroObj;
         ledCincoObj = nledCincoObj;
+        fanUnoObj = nfanUnoObj;
+        fanUnoObj = nfanDosObj;
       }    
       
       void initTFT(){
@@ -87,32 +91,36 @@ class TftMine{
       void funMenu(){
         tft.fillScreen(CYAN);
         
-        drawText(75, 10, "Menu", RED, 4);
-        
-        tft.drawRect(40, 80, 160, 50, RED);
-        drawText(55, 95, "Temperatura", BLACK, 2);
+        drawText(75, 10, "Menu", RED, 3);
+  
+        tft.drawRect(40, 60, 160, 40, RED);
+        drawText(55, 75, "Temperatura", BLACK, 2);
       
-        tft.drawRect(40, 150, 160, 50, RED);
-        drawText(75, 165, "Personas", BLACK, 2);
+        tft.drawRect(40, 120, 160, 40, RED);
+        drawText(70, 132, "Personas", BLACK, 2);
       
-        tft.drawRect(40, 220, 160, 50, RED);  
-        drawText(90, 235, "Luces", BLACK, 2);
+        tft.drawRect(40, 180, 160, 40, RED);  
+        drawText(90, 192, "Luces", BLACK, 2);
+      
+        tft.drawRect(40, 240, 160, 40, RED);  
+        drawText(60, 255, "Ventilador", BLACK, 2);
       
         funTFT();
       }
 
-      void funTFT(){
-      //  while(true){     
-          if(pressure(20, 220, 200, 240)){
-           // temperature();
-          }
-          if(pressure(20, 220, 150, 190)){
-          //  people();
-          }
-          if(pressure(20, 220, 70, 120)){
-             light();
-          }         
-       // }
+      void funTFT(){     
+        if(pressure(20, 220, 220, 260)){
+          temperature();
+        }
+        if(pressure(20, 220, 160, 200)){
+          people();
+        }
+        if(pressure(20, 220, 100, 140)){
+          light();
+        }
+        if(pressure(20, 220, 40, 80)){
+          fan();
+        } 
       }
 
       boolean pressure(int x1, int x2, int y1, int y2){  
@@ -167,7 +175,61 @@ class TftMine{
           ledOn(95, 120);
         }    
       }
-     boolean ledOn(int y1, int y2){
+
+      void fan(){
+        tft.fillScreen(BLACK);
+        
+        drawText(75, 5, "Aire", RED, 3);
+      
+        drawText(20, 60, "Caliente", CYAN, 2);
+        drawFillRect(50, fan1);
+        
+        drawText(20, 140, "Frio", CYAN, 2);
+        drawFillRect(130, fan2);
+      
+        tft.drawRect(20, 250, 100, 50, RED);
+        drawText(45, 265, "Menu", CYAN, 2);
+      
+        tft.drawRect(130, 250, 100, 50, RED);
+        drawText(145, 265, "Update", CYAN, 2);
+      
+        while(true){
+          if(pressure(20, 120, 20, 70)){
+            funMenu();
+          }
+          if(pressure(130, 230, 20, 70)){
+            fan();
+          }
+      
+          ledOn(140, 180, 235, 260, led1);
+          ledOn(155, 180, led2);
+        }
+      }
+
+      void fanOn(int y1, int y2){
+        if(y1 >= 235 && y2 <= 260){
+             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+               fanUnoObj.changeToOppositeState();           
+               fan();
+            } 
+          if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
+              fanUnoObj.changeToOppositeState();   
+              fan();        
+          }
+        }
+        if(y1 >= 155 && y2 <= 180){
+             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+               fanDosObj.changeToOppositeState();           
+               fan();
+            } 
+          if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
+              fanDosObj.changeToOppositeState();           
+              fan();
+          }
+        }
+      }
+      
+      void ledOn(int y1, int y2){
        if(y1 >= 255 && y2 <= 280){
              if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
                ledDosObj.changeToOppositeState();           
