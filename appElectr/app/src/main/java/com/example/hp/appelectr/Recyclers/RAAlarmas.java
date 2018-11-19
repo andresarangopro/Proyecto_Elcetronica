@@ -7,27 +7,20 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.hp.appelectr.Models.Alarma;
-import com.example.hp.appelectr.Models.Habitacion;
 import com.example.hp.appelectr.R;
-import com.example.hp.appelectr.Util;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.hp.appelectr.Activitys.NavigationActivity.managementBluetooth;
+public class RAAlarmas extends RecyclerView.Adapter<RAAlarmas.ViewAlarmas> {
 
-public class RAAlarmas extends RecyclerView.Adapter<RAAlarmas.ViewHabitaciones> {
-
-    public static class ViewHabitaciones extends RecyclerView.ViewHolder{
+    public static class ViewAlarmas extends RecyclerView.ViewHolder{
         TextView tvAlarma;
         View thisView;
-        public ViewHabitaciones(View itemView) {
+        public ViewAlarmas(View itemView) {
             super(itemView);
             tvAlarma = itemView.findViewById(R.id.tvFechaAlarm);
             thisView = itemView;
@@ -45,14 +38,14 @@ public class RAAlarmas extends RecyclerView.Adapter<RAAlarmas.ViewHabitaciones> 
 
     @NonNull
     @Override
-    public ViewHabitaciones onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewAlarmas onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.rv_alarmas,parent,false);
-        return new ViewHabitaciones(v);
+        return new ViewAlarmas(v);
 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHabitaciones holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewAlarmas holder, final int position) {
         long time = listAlarmas.get(position);
         holder.tvAlarma.setText(getDate((time+18000)*1000));//getDate(alarma.getFechaActivacionAlarma().get(position)));
 

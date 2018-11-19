@@ -77,7 +77,11 @@ public final class  ManagementBluetooth{
     public void recogniceActionFromTxt(String action, String data){
         switch(action){
             case "HABITACIONES":{
-                habitacionDAO.updateHabitacionesLigthTempFireB(data);
+                try {
+                    habitacionDAO.updateHabitacionesLigthTempFireB(data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             case "ALARMAS":{
@@ -90,7 +94,11 @@ public final class  ManagementBluetooth{
                 break;
             }
             case "LASTTIMEHAB":{
-                habitacionDAO.updateHabitacionesPersonaTempFireB(data);
+                try {
+                    habitacionDAO.updateHabitacionesPersonaTempFireB(data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             }
             case "PERSONAS":{

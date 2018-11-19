@@ -1,7 +1,7 @@
 //=========================================
 //== Manejo Bluetooth 
 //=========================================
-#include <SoftwareSerial.h>
+
 SoftwareSerial ModBluetooth(10,11); // RX, TX recorder que se cruzan
 class ManagementBluetooth{
     //=========================================
@@ -113,7 +113,8 @@ class ManagementBluetooth{
          ModBluetooth.print("horasEntrada#");
       }
 
-      void mainLigths(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj, DigitalWObject ledTresObj, DigitalWObject ledCuatroObj, DigitalWObject ledCincoObj){
+      void mainLigths(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj
+      , DigitalWObject ledTresObj, DigitalWObject ledCuatroObj, DigitalWObject ledCincoObj){
           while(varChar != 'A'){
             varChar = ModBluetooth.read();   
             switch(varChar){

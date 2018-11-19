@@ -1,12 +1,9 @@
 package com.example.hp.appelectr.Activitys;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,12 +15,11 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 import com.example.hp.appelectr.Bluetooth.ManagementBluetooth;
-import com.example.hp.appelectr.FirebaseDAO;
+import com.example.hp.appelectr.Fragments.AlarmsFragment;
+import com.example.hp.appelectr.Fragments.PersonasFragment;
 import com.example.hp.appelectr.Fragments.PrincipalFragment;
+import com.example.hp.appelectr.Fragments.TemperatureFragment;
 import com.example.hp.appelectr.R;
-import com.google.firebase.database.DatabaseReference;
-
-import static com.example.hp.appelectr.Fragments.TemperatureFragment.valueEventListen;
 
 public class NavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,7 +34,7 @@ public class NavigationActivity extends AppCompatActivity
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle("Inicio");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -110,27 +106,23 @@ public class NavigationActivity extends AppCompatActivity
 
         int id = item.getItemId();
         switch (id){
-            case R.id.nav_camera:{
-
+            case R.id.nav_main:{
+                fragment = new PrincipalFragment();
                 break;
             }
-            case R.id.nav_gallery:{
-
+            case R.id.nav_persons:{
+                fragment = new PersonasFragment();
                 break;
             }
-            case R.id.nav_slideshow:{
-
+            case R.id.nav_alarms:{
+                fragment = new AlarmsFragment();
                 break;
             }
-            case R.id.nav_manage:{
-
+            case R.id.nav_habitaciones:{
+                fragment = new TemperatureFragment();
                 break;
             }
-            case R.id.nav_share:{
-
-                break;
-            }
-            case R.id.nav_send:{
+            case R.id.nav_logout:{
 
                 break;
             }

@@ -58,7 +58,10 @@ class TftMine{
       
     public: 
     
-      TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj){       
+      TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj
+      ,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, 
+        DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj){    
+           
         ledUnoObj = nledUnoObj;
         ledDosObj = nledDosObj;
         ledTresObj = nledTresObj;
@@ -66,6 +69,7 @@ class TftMine{
         ledCincoObj = nledCincoObj;
         fanUnoObj = nfanUnoObj;
         fanUnoObj = nfanDosObj;
+   
       }    
       
       void initTFT(){
@@ -110,16 +114,16 @@ class TftMine{
 
       void funTFT(){     
         if(pressure(20, 220, 220, 260)){
-          temperature();
+//          temperature();
         }
         if(pressure(20, 220, 160, 200)){
-          people();
+         // people();
         }
         if(pressure(20, 220, 100, 140)){
           light();
         }
         if(pressure(20, 220, 40, 80)){
-          fan();
+         // fan();
         } 
       }
 
@@ -182,10 +186,10 @@ class TftMine{
         drawText(75, 5, "Aire", RED, 3);
       
         drawText(20, 60, "Caliente", CYAN, 2);
-        drawFillRect(50, fan1);
+//        drawFillRect(50, fan1);
         
         drawText(20, 140, "Frio", CYAN, 2);
-        drawFillRect(130, fan2);
+     //   drawFillRect(130, fan2);
       
         tft.drawRect(20, 250, 100, 50, RED);
         drawText(45, 265, "Menu", CYAN, 2);
@@ -201,8 +205,8 @@ class TftMine{
             fan();
           }
       
-          ledOn(140, 180, 235, 260, led1);
-          ledOn(155, 180, led2);
+//          ledOn(140, 180, 235, 260, led1);
+      //    ledOn(155, 180, led2);
         }
       }
 

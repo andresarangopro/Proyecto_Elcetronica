@@ -14,12 +14,14 @@ public class Persona extends NodoFirebase {
     private String nombre;
     private String born;
     private String keyHouse;
+    private long promHoraEntrada;
     private List<Long> fechaEntradConHora;
 
-    public Persona(String nombre, String born, String keyHouse, List<Long> fechaEntradConHora) {
+    public Persona(String nombre, String born, String keyHouse, long promHoraEntrada, List<Long> fechaEntradConHora) {
         this.nombre = nombre;
         this.born = born;
         this.keyHouse = keyHouse;
+        this.promHoraEntrada = promHoraEntrada;
         this.fechaEntradConHora = fechaEntradConHora;
     }
 
@@ -49,7 +51,21 @@ public class Persona extends NodoFirebase {
         this.keyHouse = keyHouse;
     }
 
+    public long getPromHoraEntrada() {
+        return promHoraEntrada;
+    }
 
+    public void setPromHoraEntrada(long promHoraEntrada) {
+        this.promHoraEntrada = promHoraEntrada;
+    }
+
+    public List<Long> getFechaEntradConHora() {
+        return fechaEntradConHora;
+    }
+
+    public void setFechaEntradConHora(List<Long> fechaEntradConHora) {
+        this.fechaEntradConHora = fechaEntradConHora;
+    }
 
     @Override
     public void delete(String[] fatherKey) {
@@ -78,6 +94,6 @@ public class Persona extends NodoFirebase {
 
     @Override
     public String getFirebaseNodeName() {
-        return null;
+        return "Personas";
     }
 }

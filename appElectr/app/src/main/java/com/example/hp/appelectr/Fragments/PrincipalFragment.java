@@ -28,7 +28,7 @@ import static com.example.hp.appelectr.Activitys.NavigationActivity.inTemperatur
 public class PrincipalFragment extends Fragment implements View.OnClickListener {
 
     private View view;
-    private ImageButton btnRefresHab, btnDesconectar, btnHabitacion,btnAlarms;
+    private ImageButton btnRefresHab, btnPersonas, btnDesconectar, btnHabitacion,btnAlarms;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +47,8 @@ public class PrincipalFragment extends Fragment implements View.OnClickListener 
         btnDesconectar = view.findViewById(R.id.IdDesconectar);
         btnHabitacion = view.findViewById(R.id.btnHabitaciones);
         btnAlarms = view.findViewById(R.id.btnAlarms);
+        btnPersonas = view.findViewById(R.id.btnPersonas);
+        btnPersonas.setOnClickListener(this);
         btnAlarms.setOnClickListener(this);
         btnRefresHab.setOnClickListener(this);
         btnDesconectar.setOnClickListener(this);
@@ -75,6 +77,14 @@ public class PrincipalFragment extends Fragment implements View.OnClickListener 
                 TemperatureFragment temperatureFragment= new TemperatureFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.FrFragment,temperatureFragment,"findThisFragment")
+                        .addToBackStack(null)
+                        .commit();
+                break;
+            }
+            case R.id.btnPersonas:{
+                PersonasFragment personasFragment= new PersonasFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.FrFragment,personasFragment,"findThisFragment")
                         .addToBackStack(null)
                         .commit();
                 break;

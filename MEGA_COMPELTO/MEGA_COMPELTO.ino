@@ -1,7 +1,7 @@
 //=========================================
 //== INCLUDES
 //=========================================
-
+#include <SoftwareSerial.h>
 /**RFID**/
 #include <SPI.h>
 #include <MFRC522.h>
@@ -30,24 +30,23 @@
 /**SERVO**/
 #define SERVO_PIN 44
 /**SENSOR PIR**/
-#define SENSOR_MOVIMIENTO_UNO 41//4
-#define SENSOR_MOVIMIENTO_DOS 5
+#define SENSOR_MOVIMIENTO_UNO 38
+#define SENSOR_MOVIMIENTO_DOS 34
+#define SENSOR_MOVIMIENTO_COCINA 40
+#define SENSOR_MOVIMIENTO_TRES 36
 /**SENSOR TEMPERATURA - HUMEDAD**/
 #define SENSOR_TEMPERATURA 23//46
 #define DHTTYPE DHT11
 /**BUZZER**/
 #define BUZZER 45//48
 /**LEDS**/
-#define LED_SALA 22//47
-#define LED_CUARTO_UNO 24//47
-#define LED_CUARTO_DOS 26//47
-#define LED_CUARTO_TRES 28//47
-#define LED_COCINA 30//47
+#define LED_SALA 22
+#define LED_CUARTO_UNO 24
+#define LED_CUARTO_DOS 26
+#define LED_CUARTO_TRES 28
+#define LED_COCINA 30
 /**COOLER**/
 #define COOLER_UNO 49
-/**VENTILADOR**/
-#define FAN_UNO 32
-#define FAN_DOS 34
 
 //=========================================
 //== VARIABLES
@@ -73,6 +72,8 @@ uint8_t static APAGADO = LOW;
 /**SENSOR_PIR**/
 SensorMovimiento sensorUno(HIGH,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO,0);
 SensorMovimiento sensorDos(HIGH,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS,0);
+SensorMovimiento sensorTres(HIGH,"SENSOR TRES",SENSOR_MOVIMIENTO_TRES,0);
+SensorMovimiento sensorCocina(HIGH,"SENSOR COCINA",SENSOR_MOVIMIENTO_COCINA,0);
 /**SENSOR TEMPERATURA - HUMEDAD**/
 DHT dht(SENSOR_TEMPERATURA, DHTTYPE);
 /**BUZZER**/
@@ -85,11 +86,8 @@ DigitalWObject led_salaD(LED_SALA,APAGADO, "LED SALA");
 DigitalWObject led_cuartoUno(LED_CUARTO_UNO,APAGADO, "LED CUARTO UNO");
 DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
 DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
-/**VENTILADORES**/
-DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
-DigitalWObject fan_dos(FAN_DOS, APAGADO, "VENTILADOR UNO");
 /**TFT**/
-TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos);
+TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, led_cocinaD, led_cocinaD);
 boolean paint = true;
 
 
@@ -127,15 +125,8 @@ void loop() {
   if(tft_s.pressure(20, 220, 70, 120)){
         tft_s.light();
    }   
-   // tft_s.funTFT();
-  
-   if(sensorUno.activacionSensor()){
-    Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
-    float temperatura= readTemperatureAsCelcius(dht);
-    bluetooth.updatePersonaAndTemp("0", temperatura);
-   }
-   //sensorDos.getStateOnce(); 
-  
+    movementSensors();
+    
 }
 
 //=========================================
@@ -247,7 +238,7 @@ float readHumidity(DHT dht){
 }
 
 float readTemperatureAsCelcius(DHT dht){
-  delay(10);
+  delay(2000);
   return dht.readTemperature();
 }
 
@@ -263,6 +254,36 @@ boolean checkRead(float value){
   return isnan(value) ? false : true;
 }
 
+//=========================================
+//== SENSOR MOVIMIENTO
+//=========================================
+
+ void movementSensors(){
+      float temperatura=0;
+  if(sensorUno.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("1", temperatura);
+   }
+   if(sensorDos.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+     Serial.println(sensorDos.getIdSensor()+" ACTIVADO");
+     bluetooth.updatePersonaAndTemp("2", temperatura);
+   }
+   if(sensorTres.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorTres.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("3", temperatura);
+   }
+   if(sensorCocina.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorCocina.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("4", temperatura);
+   }
+
+ 
+ }
+  
 //=========================================
 //== UTILS
 //=========================================
