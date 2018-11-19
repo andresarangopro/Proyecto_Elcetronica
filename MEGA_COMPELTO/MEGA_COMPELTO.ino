@@ -113,7 +113,7 @@ void setup() {
 void loop() {
    readCardRFID();  
    varCharBluetooth= bluetooth.readT();
-   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD);
+   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD,buzzer);
    if(paint){
      tft_s.funMenu();
      paint = false;
@@ -225,9 +225,7 @@ void openDoor(int correctMasterKey,String cardSerialReadVar){
      moveServo(180); 
   }else if(alarmCount >= 3){       
     buzzer.setEstado(ENCENDIDO);
-    bluetooth.insertAlarm();
-    delay(2000);
-    buzzer.setEstado(APAGADO);
+    bluetooth.insertAlarm();  
     alarmCount = 0;
   }else{ 
      alarmCount++;

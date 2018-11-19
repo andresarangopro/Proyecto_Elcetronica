@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.hp.appelectr.Activitys.NavigationActivity;
+import com.example.hp.appelectr.DAOS.AlarmaDAO;
 import com.example.hp.appelectr.FirebaseDAO;
 import com.example.hp.appelectr.GridSpacingItemDecoration;
 import com.example.hp.appelectr.Models.Alarma;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.hp.appelectr.Activitys.NavigationActivity.managementBluetooth;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -46,6 +49,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
     private RAAlarmas mAlarmas;
     private LinearLayoutManager mLinearLayoutManager;
     private Alarma alarmaF;
+    private AlarmaDAO alarmaDao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +65,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
 
     private void init(){
         firebaseDAO = new FirebaseDAO();
+        alarmaDao = new AlarmaDAO();
         btnAlarmState = view.findViewById(R.id.btnStateAlarma);
         btnAlarmState.setOnClickListener(this);
     }
@@ -104,7 +109,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
                         for (String str:part){
                             str = str.substring(str.indexOf("=")+1,str.length());
                             long time = Long.parseLong(str);
-                            listAlarmas.add(0,time);
+                            listAlarmas.add(time);
                             Log.d("TAG", time+"");
                         }
                     }
@@ -131,6 +136,9 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
         int vista = view.getId();
         switch (vista){
             case R.id.btnStateAlarma:{
+                managementBluetooth.myConexionBT.write("3");
+                alarmaDao.changeStateAlarm(0);
+                btnAlarmState.setText("Desactivada");
                 break;
             }
         }
