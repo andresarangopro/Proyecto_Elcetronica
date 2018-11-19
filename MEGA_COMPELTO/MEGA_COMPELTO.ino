@@ -16,6 +16,11 @@
 #include <DHT.h>
 /**Objects an ouput**/
 #include "DigitalWObject.h"
+/**BLUETOOTH**/
+#include "ManagementBluetooth.h"
+/**TFT**/
+#include "TftMine.h"
+
 //=========================================
 //== DEFINES
 //=========================================
@@ -23,27 +28,38 @@
 #define SS_PIN 53
 #define RST_PIN 49
 /**SERVO**/
-#define SERVO_PIN 2
-/**COOLER**/
-#define COOLER_UNO 49
+#define SERVO_PIN 44
 /**SENSOR PIR**/
-#define SENSOR_MOVIMIENTO_UNO 4
+#define SENSOR_MOVIMIENTO_UNO 41//4
 #define SENSOR_MOVIMIENTO_DOS 5
 /**SENSOR TEMPERATURA - HUMEDAD**/
-#define SENSOR_TEMPERATURA 46
+#define SENSOR_TEMPERATURA 23//46
 #define DHTTYPE DHT11
 /**BUZZER**/
-#define BUZZER 48
+#define BUZZER 45//48
 /**LEDS**/
-#define LED_COCINA 47
+#define LED_SALA 22//47
+#define LED_CUARTO_UNO 24//47
+#define LED_CUARTO_DOS 26//47
+#define LED_CUARTO_TRES 28//47
+#define LED_COCINA 30//47
+/**COOLER**/
+#define COOLER_UNO 49
+
 //=========================================
 //== VARIABLES
 //=========================================
 /**RFID**/
 int static KEY_MASTER_CARD[] = {131,221,251,36}; //This is the stored UID
+int static KEY_MASTER_CARD2[] = {194,104,236,115};
+const int arrayKeys[][4] = {{131,221,251,36},{194,104,236,115}};
+int filasKeys = 2;
+int columnasKeys = 4;
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
 /**LCD**/
 LiquidCrystal_I2C lcd(0x3F,16,2);  //
+/**BLUETOOTH**/
+ManagementBluetooth bluetooth(10,11);
 /**SERVO**/
 Servo ServoPuerta; 
 int static CERO_GRADES = 0;
@@ -52,8 +68,8 @@ int static DELAY_UNTIL_OPEN_DOOR = 5000;
 uint8_t static ENCENDIDO = HIGH;
 uint8_t static APAGADO = LOW;
 /**SENSOR_PIR**/
-SensorMovimiento sensorUno(HIGH,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO);
-SensorMovimiento sensorDos(HIGH,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS);
+SensorMovimiento sensorUno(HIGH,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO,0);
+SensorMovimiento sensorDos(HIGH,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS,0);
 /**SENSOR TEMPERATURA - HUMEDAD**/
 DHT dht(SENSOR_TEMPERATURA, DHTTYPE);
 /**BUZZER**/
@@ -61,9 +77,20 @@ DigitalWObject buzzer(BUZZER, APAGADO, "BUZZER");
 /**COOLER**/
 DigitalWObject cooler(COOLER_UNO, APAGADO, "COOLER_UNO");
 /**LEDS**/
-DigitalWObject led_cocina(LED_COCINA,APAGADO, "LED COCINA");
+DigitalWObject led_cocinaD(LED_COCINA,APAGADO, "LED COCINA");
+DigitalWObject led_salaD(LED_SALA,APAGADO, "LED SALA");
+DigitalWObject led_cuartoUno(LED_CUARTO_UNO,APAGADO, "LED CUARTO UNO");
+DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
+DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
+/**TFT**/
+TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres);
+boolean paint = true;
+
+
 int state;
+int alarmCount =1;
 char c;
+char varCharBluetooth;    
 //=========================================
 //== SETUP PROYECT
 //=========================================
@@ -72,10 +99,12 @@ void setup() {
     Serial.begin(9600);
     
     SPI.begin(); // Init SPI bus
+    bluetooth.beginT();
+    tft_s.initTFT();
     initRFID();
     initi2cLCD();  
     initServo();
-    dht.begin();
+    dht.begin();  
 }
 //=========================================
 //== LOOP PROYECT
@@ -83,11 +112,25 @@ void setup() {
 
 void loop() {
    readCardRFID();  
-   sensorUno.getStateOnce();
-   sensorDos.getStateOnce(); 
+   varCharBluetooth= bluetooth.readT();
+   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD);
+   if(paint){
+     tft_s.funMenu();
+     paint = false;
+   }
+  if(tft_s.pressure(20, 220, 70, 120)){
+        tft_s.light();
+   }   
+   // tft_s.funTFT();
+  
+   if(sensorUno.activacionSensor()){
+    Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
+    float temperatura= readTemperatureAsCelcius(dht);
+    bluetooth.updatePersonaAndTemp("0", temperatura);
+   }
+   //sensorDos.getStateOnce(); 
   
 }
-
 
 //=========================================
 //==RFID MODULO 
@@ -105,7 +148,7 @@ void readCardRFID(){
       printSerialCard(serialCard);
       printSerialCardOnLCD(serialCard);
       boolean isMasterKey = compareCardReadWithMasterCard(cardSerialReadVar);
-      openDoor(isMasterKey);
+      openDoor(isMasterKey,serialCard);
     } 
 }
 
@@ -128,11 +171,16 @@ String serialCardToString(MFRC522::Uid cardSerial){
 
 boolean compareCardReadWithMasterCard(MFRC522::Uid cardSerial){
     boolean match = true;
-    for (byte i = 0; i < cardSerial.size; i++) {
-      if(!(cardSerial.uidByte[i] == KEY_MASTER_CARD[i])){
-        match = false;
-      }  
-    }
+  //  for (byte i = 0; i < cardSerial.size; i++) {  
+    for(int i =0; i < filasKeys; i++){      
+      match = true;
+      for(int j =0; j < columnasKeys; j++){   
+        if(!(cardSerial.uidByte[j] == arrayKeys[i][j])){      
+          match = false;
+        }  
+      }
+      if(match)return match;
+     }
     return match;
 }
 
@@ -171,13 +219,18 @@ void moveServo(int grade){
    ServoPuerta.write(90); 
 }
 
-void openDoor(int correctMasterKey){
+void openDoor(int correctMasterKey,String cardSerialReadVar){
   if(correctMasterKey){
+     bluetooth.sendKeyPersona(cardSerialReadVar);    
      moveServo(180); 
-  }else{
+  }else if(alarmCount >= 3){       
     buzzer.setEstado(ENCENDIDO);
+    bluetooth.insertAlarm();
     delay(2000);
     buzzer.setEstado(APAGADO);
+    alarmCount = 0;
+  }else{ 
+     alarmCount++;
   }
 }
 
@@ -190,7 +243,7 @@ float readHumidity(DHT dht){
 }
 
 float readTemperatureAsCelcius(DHT dht){
-  delay(1000);
+  delay(10);
   return dht.readTemperature();
 }
 

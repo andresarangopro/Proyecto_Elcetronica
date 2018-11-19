@@ -10,6 +10,7 @@ class SensorMovimiento{
   
   private:
     int state;
+    int maded;
     String idSensor;
     uint8_t defSensor;
 
@@ -18,14 +19,18 @@ class SensorMovimiento{
   //=========================================
   
   public:
-    SensorMovimiento(int newState, String newIdSensor, uint8_t newDefSensor){        // Constructor
+    SensorMovimiento(int newState, String newIdSensor, uint8_t newDefSensor, int newMaded){        // Constructor
       state = newState;
       idSensor = newIdSensor;
       defSensor = newDefSensor;
+      maded = newMaded;
       pinMode(defSensor, INPUT);  
     }
     void setState(int newState){
       state = newState;
+    }
+    void setMaded(int newMaded){
+       maded = newMaded;
     }
     void setIdSensor(String newIdSensor){
       idSensor = newIdSensor;
@@ -36,6 +41,9 @@ class SensorMovimiento{
  
     int getState(){
       return (state);
+    }
+    int getMaded(){
+      return maded;
     }
     String getIdSensor(){
       return(idSensor);
@@ -59,6 +67,17 @@ class SensorMovimiento{
         }  
       }   
     } 
+
+   boolean activacionSensor(){
+       if(detectarMovimiento() == HIGH && maded == 0){          
+            setMaded(1);
+            return true;          
+       }else if(maded == 1 && detectarMovimiento() == LOW){
+            setMaded(0);
+            return false;
+       }
+       return false;
+    }
 
 };
  
