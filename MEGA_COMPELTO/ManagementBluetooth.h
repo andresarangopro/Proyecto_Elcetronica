@@ -35,7 +35,7 @@ class ManagementBluetooth{
         return varRead;
       }
 
-      void connectB(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj,DigitalWObject ledTresObj, DigitalWObject ledCuatroObj,DigitalWObject ledCincoObj){
+      void connectB(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj,DigitalWObject ledTresObj, DigitalWObject ledCuatroObj,DigitalWObject ledCincoObj,DigitalWObject buzzer){
         switch(varChar){
           case '1':{
             updateAllHabitaciones();
@@ -43,6 +43,10 @@ class ManagementBluetooth{
           }        
           case '2':{
             mainLigths(varChar,ledUnoObj, ledDosObj, ledTresObj, ledCuatroObj, ledCincoObj);
+            break;
+          }
+          case '3':{
+            buzzer.setEstado(LOW);
             break;
           }
           default:{
