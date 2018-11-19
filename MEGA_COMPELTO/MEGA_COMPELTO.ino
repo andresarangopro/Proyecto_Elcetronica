@@ -47,13 +47,9 @@
 #define LED_COCINA 30
 /**COOLER**/
 #define COOLER_UNO 49
-<<<<<<< HEAD
-=======
 /**VENTILADOR**/
 #define FAN_UNO 32
 #define FAN_DOS 33
->>>>>>> refs/remotes/origin/felipe
-
 //=========================================
 //== VARIABLES
 //=========================================
@@ -92,12 +88,9 @@ DigitalWObject led_salaD(LED_SALA,APAGADO, "LED SALA");
 DigitalWObject led_cuartoUno(LED_CUARTO_UNO,APAGADO, "LED CUARTO UNO");
 DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
 DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
-<<<<<<< HEAD
-=======
 /**VENTILADORES**/
 DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
 DigitalWObject fan_dos (FAN_DOS, APAGADO, "VENTILADOR UNO");
->>>>>>> refs/remotes/origin/felipe
 /**TFT**/
 TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, led_cocinaD, led_cocinaD);
 boolean paint = true;
@@ -134,27 +127,14 @@ void loop() {
      tft_s.funMenu();
      paint = false;
    }
-   if(tft_s.pressure(20, 220, 100, 140)){
+   if(tft_s.pressure(20, 220, 70, 120)){
         tft_s.light();
-<<<<<<< HEAD
-   }   
-    movementSensors();
-    
-=======
-   }
+   } 
    if(tft_s.pressure(20, 220, 40, 80)){
       tft_s.fan();
-   }
-   // tft_s.funTFT();
-  
-   if(sensorUno.activacionSensor()){
-    Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
-    float temperatura= readTemperatureAsCelcius(dht);
-    bluetooth.updatePersonaAndTemp("0", temperatura);
-   }
-   //sensorDos.getStateOnce(); 
-  
->>>>>>> refs/remotes/origin/felipe
+   }  
+    movementSensors();
+    
 }
 
 //=========================================
@@ -247,8 +227,7 @@ void moveServo(int grade){
 void openDoor(int correctMasterKey,String cardSerialReadVar){
   if(correctMasterKey){
      bluetooth.sendKeyPersona(cardSerialReadVar);    
-     moveServo(180);
-     buzzer.setEstado(APAGADO); 
+     moveServo(180); 
   }else if(alarmCount >= 3){       
     buzzer.setEstado(ENCENDIDO);
     bluetooth.insertAlarm();  
