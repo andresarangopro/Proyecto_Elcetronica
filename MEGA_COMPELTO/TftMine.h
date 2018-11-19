@@ -110,10 +110,10 @@ class TftMine{
 
       void funTFT(){     
         if(pressure(20, 220, 220, 260)){
-          temperature();
+          //temperature();
         }
         if(pressure(20, 220, 160, 200)){
-          people();
+          //people();
         }
         if(pressure(20, 220, 100, 140)){
           light();
@@ -182,10 +182,10 @@ class TftMine{
         drawText(75, 5, "Aire", RED, 3);
       
         drawText(20, 60, "Caliente", CYAN, 2);
-        drawFillRect(50, fan1);
+        drawFillRect(50, fanUnoObj);
         
         drawText(20, 140, "Frio", CYAN, 2);
-        drawFillRect(130, fan2);
+        drawFillRect(130, fanDosObj);
       
         tft.drawRect(20, 250, 100, 50, RED);
         drawText(45, 265, "Menu", CYAN, 2);
@@ -201,27 +201,27 @@ class TftMine{
             fan();
           }
       
-          ledOn(140, 180, 235, 260, led1);
-          ledOn(155, 180, led2);
+          ledOn(235, 260);
+          ledOn(155, 180);
         }
       }
 
       void fanOn(int y1, int y2){
         if(y1 >= 235 && y2 <= 260){
-             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
-               fanUnoObj.changeToOppositeState();           
-               fan();
-            } 
+           if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+             fanUnoObj.changeToOppositeState();           
+             fan();
+          } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
               fanUnoObj.changeToOppositeState();   
               fan();        
           }
         }
         if(y1 >= 155 && y2 <= 180){
-             if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
-               fanDosObj.changeToOppositeState();           
-               fan();
-            } 
+           if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
+             fanDosObj.changeToOppositeState();           
+             fan();
+          } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
               fanDosObj.changeToOppositeState();           
               fan();

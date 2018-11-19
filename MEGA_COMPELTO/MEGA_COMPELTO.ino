@@ -124,9 +124,12 @@ void loop() {
      tft_s.funMenu();
      paint = false;
    }
-  if(tft_s.pressure(20, 220, 70, 120)){
+   if(tft_s.pressure(20, 220, 100, 140)){
         tft_s.light();
-   }   
+   }
+   if(tft_s.pressure(20, 220, 40, 80)){
+      tft_s.fan();
+   }
    // tft_s.funTFT();
   
    if(sensorUno.activacionSensor()){
@@ -228,7 +231,8 @@ void moveServo(int grade){
 void openDoor(int correctMasterKey,String cardSerialReadVar){
   if(correctMasterKey){
      bluetooth.sendKeyPersona(cardSerialReadVar);    
-     moveServo(180); 
+     moveServo(180);
+     buzzer.setEstado(APAGADO); 
   }else if(alarmCount >= 3){       
     buzzer.setEstado(ENCENDIDO);
     bluetooth.insertAlarm();  
