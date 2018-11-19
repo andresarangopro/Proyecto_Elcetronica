@@ -87,7 +87,7 @@ DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
 DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
 /**VENTILADORES**/
 DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
-DigitalWObject fan_dos(FAN_DOS, APAGADO, "VENTILADOR UNO");
+DigitalWObject fan_dos (FAN_DOS, APAGADO, "VENTILADOR UNO");
 /**TFT**/
 TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos);
 boolean paint = true;
