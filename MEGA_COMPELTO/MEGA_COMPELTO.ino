@@ -47,7 +47,7 @@
 #define COOLER_UNO 49
 /**VENTILADOR**/
 #define FAN_UNO 32
-#define FAN_DOS 34
+#define FAN_DOS 33
 
 //=========================================
 //== VARIABLES

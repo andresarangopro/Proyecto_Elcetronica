@@ -177,6 +177,8 @@ class TftMine{
       }
 
       void fan(){
+        boolean fans = true;
+        
         tft.fillScreen(BLACK);
         
         drawText(75, 5, "Aire", RED, 3);
@@ -193,12 +195,14 @@ class TftMine{
         tft.drawRect(130, 250, 100, 50, RED);
         drawText(145, 265, "Update", CYAN, 2);
       
-        while(true){
+        while(fans){
           if(pressure(20, 120, 20, 70)){
             funMenu();
+            fans = false;
           }
           if(pressure(130, 230, 20, 70)){
             fan();
+            fans = false;
           }
       
           ledOn(235, 260);
