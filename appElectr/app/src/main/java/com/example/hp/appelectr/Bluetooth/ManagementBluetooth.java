@@ -64,10 +64,12 @@ public final class  ManagementBluetooth{
             if (endOfLineIndex > 0) {
                 String dataInPrint = DataStringIN.substring(0, endOfLineIndex);//dato recibido
                 String[] data = dataInPrint.split("&");
-                Toast.makeText(context, data[0]+"-" +data[1], Toast.LENGTH_SHORT).show();
-                ///tvBufferIn.setText("Dato: " + data[0]);
-                recogniceActionFromTxt(data[0], data[1]);
-                arduinoMessage = data;
+                if(data.length > 1){
+                    Toast.makeText(context, data[0]+"-" +data[1], Toast.LENGTH_SHORT).show();
+                    recogniceActionFromTxt(data[0], data[1]);
+                    arduinoMessage = data;
+                }
+
                 DataStringIN.delete(0, DataStringIN.length());
             }
         }

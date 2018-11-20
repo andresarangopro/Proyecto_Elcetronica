@@ -20,7 +20,7 @@
             android:id="@+id/tvPersonaNone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Personas"
+            android:text=""
             android:background="@drawable/border_line"
             android:textColor="@color/colorYellowIcons"
 
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorYellowIcons"
-            android:text="Temperatura"
+            android:text=""
             android:textSize="20dp" />
 
         <LinearLayout

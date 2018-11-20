@@ -50,6 +50,9 @@
 /**VENTILADOR**/
 #define FAN_UNO 32
 #define FAN_DOS 33
+/**CELDA**/
+#define CELDA_PIN 35
+
 //=========================================
 //== VARIABLES
 //=========================================
@@ -91,8 +94,10 @@ DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
 /**VENTILADORES**/
 DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
 DigitalWObject fan_dos (FAN_DOS, APAGADO, "VENTILADOR UNO");
+/**CELDA**/
+DigitalWObject celda(CELDA_PIN, APAGADO, "CELDA");
 /**TFT**/
-TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos);
+TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos,celda);
 boolean paint = true;
 
 
@@ -122,17 +127,20 @@ void setup() {
 void loop() {
    readCardRFID();  
    varCharBluetooth= bluetooth.readT();
-   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD,buzzer);
-   if(paint){
+   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD,buzzer,fan_uno, fan_dos, celda);
+   if(tft_s.entroMenu){
      tft_s.funMenu();
-     paint = false;
+     tft_s.setState(false);
    }
    if(tft_s.pressure(20, 220, 70, 120)){
         tft_s.light();
+        tft_s.setStateFan(true);
    } 
    if(tft_s.pressure(20, 220, 40, 80)){
       tft_s.fan();
+      tft_s.setStateFan(true);
    }  
+  
     movementSensors();
     
 }

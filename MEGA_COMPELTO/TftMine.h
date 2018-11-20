@@ -43,6 +43,7 @@ int X;
 int Y;
 int Z;
 boolean fun = true;
+boolean fans = true;
 int x1StaticTft = 140;
 int x2StaticTft = 180;
 
@@ -55,12 +56,15 @@ class TftMine{
       DigitalWObject ledCincoObj;
       DigitalWObject fanUnoObj;
       DigitalWObject fanDosObj;
+      DigitalWObject celda;
+      
+      boolean entroFan;
       
     public: 
-    
+       boolean entroMenu;
       TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj
       ,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, 
-        DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj){    
+        DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj, DigitalWObject nCelda){    
            
         ledUnoObj = nledUnoObj;
         ledDosObj = nledDosObj;
@@ -68,8 +72,10 @@ class TftMine{
         ledCuatroObj = nledCuatroObj;
         ledCincoObj = nledCincoObj;
         fanUnoObj = nfanUnoObj;
-        fanUnoObj = nfanDosObj;
-   
+        fanDosObj = nfanDosObj;
+        celda = nCelda;
+        entroMenu = true;
+        entroFan = true;
       }    
       
       void initTFT(){
@@ -94,7 +100,7 @@ class TftMine{
       
       void funMenu(){
         tft.fillScreen(CYAN);
-        
+      
         drawText(75, 10, "Menu", RED, 3);
   
         tft.drawRect(40, 60, 160, 40, RED);
@@ -108,8 +114,8 @@ class TftMine{
       
         tft.drawRect(40, 240, 160, 40, RED);  
         drawText(60, 255, "Ventilador", BLACK, 2);
-      
-        funTFT();
+       
+       // funTFT();
       }
 
       void funTFT(){     
@@ -130,6 +136,7 @@ class TftMine{
           light();
         }
         if(pressure(20, 220, 40, 80)){
+          setState(true);
           fan();
         } 
       }
@@ -173,10 +180,10 @@ class TftMine{
         tft.drawRect(40, 250, 160, 50, RED);
         drawText(90, 265, "Menu", CYAN, 2);
       
-        while(fun){
+        while(entroFan){
           if(pressure(20, 220, 20, 70)){
             funMenu();
-            fun = false;
+            setStateFan(false);
           }
         
           ledOn(255, 280);
@@ -188,16 +195,11 @@ class TftMine{
       }
 
       void fan(){
-        boolean fans = true;
-        
         tft.fillScreen(BLACK);
         
         drawText(75, 5, "Aire", RED, 3);
       
         drawText(20, 60, "Caliente", CYAN, 2);
-              
-        drawText(20, 140, "Frio", CYAN, 2);
-   
         drawFillRect(50, fanUnoObj);
         
         drawText(20, 140, "Frio", CYAN, 2);
@@ -209,30 +211,30 @@ class TftMine{
         tft.drawRect(130, 250, 100, 50, RED);
         drawText(145, 265, "Update", CYAN, 2);
       
-        while(fans){
+        while(entroFan){          
           if(pressure(20, 120, 20, 70)){
             funMenu();
-            fans = false;
+            setStateFan(false);
           }
           if(pressure(130, 230, 20, 70)){
-            fan();
-            fans = false;
+            fan();          
           }
 
-          ledOn(235, 260);
-          ledOn(155, 180);
-
+          fanOn(235, 260);
+          fanOn(155, 180);
         }
       }
 
       void fanOn(int y1, int y2){
         if(y1 >= 235 && y2 <= 260){
            if(pressure(x1StaticTft,x2StaticTft,y1, y2)){
-             fanUnoObj.changeToOppositeState();           
+             fanUnoObj.changeToOppositeState();       
+             celda.changeToOppositeState();     
              fan();
           } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
               fanUnoObj.changeToOppositeState();   
+              celda.changeToOppositeState(); 
               fan();        
           }
         }
@@ -242,8 +244,8 @@ class TftMine{
              fan();
           } 
           if(pressure(x1StaticTft+40, x2StaticTft+82, y1, y2)){
-              fanDosObj.changeToOppositeState();           
-              fan();
+            fanDosObj.changeToOppositeState();           
+            fan();
           }
         }
       }
@@ -329,6 +331,14 @@ class TftMine{
         }else{
           return false;
         }
+      }
+
+      void setState(boolean nEstate){
+        entroMenu = nEstate;
+      }
+
+      void setStateFan(boolean nEstate){
+        entroFan= nEstate;
       }
 
       

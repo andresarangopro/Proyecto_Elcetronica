@@ -13,11 +13,13 @@ public class Habitacion extends NodoFirebase {
     private float temperatura;
     private Long lastTimeListenM;
     private int estadoLuz;
+    private int tipo;
 
-    public Habitacion(float temperatura, Long lastTimeListenM, int estadoLuz) {
+    public Habitacion(float temperatura, Long lastTimeListenM, int estadoLuz, int tipo) {
         this.temperatura = temperatura;
         this.lastTimeListenM = lastTimeListenM;
         this.estadoLuz = estadoLuz;
+        this.tipo = tipo;
     }
 
     public Habitacion() { }
@@ -44,6 +46,14 @@ public class Habitacion extends NodoFirebase {
 
     public void setEstadoLuz(int estadoLuz) {
         this.estadoLuz = estadoLuz;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     @Override

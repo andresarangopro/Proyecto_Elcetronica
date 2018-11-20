@@ -53,9 +53,13 @@ public class RAHabitaciones extends RecyclerView.Adapter<RAHabitaciones.ViewHabi
     @Override
     public void onBindViewHolder(@NonNull final ViewHabitaciones holder, final int position) {
         final Habitacion habitacion = listHabitaciones.get(position);
-        holder.tvTemperatura.setText("TEMPERATURA: "+habitacion.getTemperatura()+"");
-        holder.tvPersonasNone.setText("PERSONA: "+ Util.calcTimeToKnowIfPerson(habitacion.getLastTimeListenM()));
-        holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.ligth_off:R.drawable.ligth_on);
+        if(listHabitaciones.get(position).getTipo() == 0){
+            holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.fan_off:R.drawable.fan_on);
+        }else{
+            holder.tvTemperatura.setText("TEMPERATURA: "+habitacion.getTemperatura()+"");
+            holder.tvPersonasNone.setText("PERSONA: "+ Util.calcTimeToKnowIfPerson(habitacion.getLastTimeListenM()));
+            holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.ligth_off:R.drawable.ligth_on);
+        }
         holder.btnLigth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +68,12 @@ public class RAHabitaciones extends RecyclerView.Adapter<RAHabitaciones.ViewHabi
                 } else {
                     listHabitaciones.get(position).setEstadoLuz(0);
                 }
-                holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.ligth_off:R.drawable.ligth_on);
+                if(listHabitaciones.get(position).getTipo() == 0){
+                    holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.fan_off:R.drawable.fan_on);
+                }else{
+                    holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.ligth_off:R.drawable.ligth_on);
+                }
+
                 managementBluetooth.myConexionBT.write(position+"");
             }
         });

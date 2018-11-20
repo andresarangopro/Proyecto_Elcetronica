@@ -35,14 +35,15 @@ class ManagementBluetooth{
         return varRead;
       }
 
-      void connectB(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj,DigitalWObject ledTresObj, DigitalWObject ledCuatroObj,DigitalWObject ledCincoObj,DigitalWObject buzzer){
+      void connectB(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj,DigitalWObject ledTresObj, 
+      DigitalWObject ledCuatroObj,DigitalWObject ledCincoObj,DigitalWObject buzzer, DigitalWObject fan_uno, DigitalWObject fan_dos,DigitalWObject celda){
         switch(varChar){
           case '1':{
             updateAllHabitaciones();
             break;
           }        
           case '2':{
-            mainLigths(varChar,ledUnoObj, ledDosObj, ledTresObj, ledCuatroObj, ledCincoObj);
+            mainLigths(varChar,ledUnoObj, ledDosObj, ledTresObj, ledCuatroObj, ledCincoObj,fan_uno, fan_dos,celda);
             break;
           }
           case '3':{
@@ -114,7 +115,7 @@ class ManagementBluetooth{
       }
 
       void mainLigths(char varChar,DigitalWObject ledUnoObj, DigitalWObject ledDosObj
-      , DigitalWObject ledTresObj, DigitalWObject ledCuatroObj, DigitalWObject ledCincoObj){
+      , DigitalWObject ledTresObj, DigitalWObject ledCuatroObj, DigitalWObject ledCincoObj, DigitalWObject fan_uno, DigitalWObject fan_dos,DigitalWObject celda){
           while(varChar != 'A'){
             varChar = ModBluetooth.read();   
             switch(varChar){
@@ -136,11 +137,23 @@ class ManagementBluetooth{
               case '3':{
                  ledCuatroObj.changeToOppositeState();
                  updateLuz("3", ledCuatroObj.getEstado());
+                 celda.changeToOppositeState();
                 break;
               }
               case '4':{
                  ledCincoObj.changeToOppositeState();
                  updateLuz("4", ledCincoObj.getEstado());
+                break;
+              }
+              case '5':{
+                 fan_uno.changeToOppositeState();
+                 celda.changeToOppositeState();
+                 updateLuz("5", fan_uno.getEstado());
+                break;
+              }
+                case '6':{
+                 fan_dos.changeToOppositeState();
+                 updateLuz("6", fan_dos.getEstado());
                 break;
               }
               default:{
