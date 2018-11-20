@@ -130,7 +130,7 @@ class TftMine{
           light();
         }
         if(pressure(20, 220, 40, 80)){
-         // fan();
+          fan();
         } 
       }
 
@@ -195,12 +195,9 @@ class TftMine{
         drawText(75, 5, "Aire", RED, 3);
       
         drawText(20, 60, "Caliente", CYAN, 2);
-
-//        drawFillRect(50, fan1);
-        
+              
         drawText(20, 140, "Frio", CYAN, 2);
-     //   drawFillRect(130, fan2);
-
+   
         drawFillRect(50, fanUnoObj);
         
         drawText(20, 140, "Frio", CYAN, 2);
@@ -221,9 +218,6 @@ class TftMine{
             fan();
             fans = false;
           }
-
-//          ledOn(140, 180, 235, 260, led1);
-      //    ledOn(155, 180, led2);
 
           ledOn(235, 260);
           ledOn(155, 180);
