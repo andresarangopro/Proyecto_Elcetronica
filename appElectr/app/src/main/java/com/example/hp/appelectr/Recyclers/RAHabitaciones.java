@@ -54,7 +54,10 @@ public class RAHabitaciones extends RecyclerView.Adapter<RAHabitaciones.ViewHabi
     public void onBindViewHolder(@NonNull final ViewHabitaciones holder, final int position) {
         final Habitacion habitacion = listHabitaciones.get(position);
         if(listHabitaciones.get(position).getTipo() == 0){
+            String posVenti = (position == 5)?"CALOR":"FRIO";
             holder.btnLigth.setBackgroundResource((habitacion.getEstadoLuz() == 0)?R.drawable.fan_off:R.drawable.fan_on);
+            holder.tvPersonasNone.setText("VENTILADOR ");
+            holder.tvTemperatura.setText(posVenti);
         }else{
             holder.tvTemperatura.setText("TEMPERATURA: "+habitacion.getTemperatura()+"");
             holder.tvPersonasNone.setText("PERSONA: "+ Util.calcTimeToKnowIfPerson(habitacion.getLastTimeListenM()));

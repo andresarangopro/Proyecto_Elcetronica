@@ -30,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.example.hp.appelectr.Activitys.NavigationActivity.managementBluetooth;
@@ -50,7 +52,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
     private LinearLayoutManager mLinearLayoutManager;
     private Alarma alarmaF;
     private AlarmaDAO alarmaDao;
-
+    private Comparator<Long> comparator = Collections.reverseOrder();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +73,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
     }
     private void setRecycler() throws IOException {
         r = getResources();
-
+        Collections.sort(listAlarmas,comparator);
         mLinearLayoutManager = new LinearLayoutManager(view.getContext());
         mRecyclerDates = view.findViewById(R.id.rv_alarmas_in_fragmrnt) ;
         mRecyclerDates.setHasFixedSize(true);
@@ -97,11 +99,9 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
                 int estadoAlarma = 0;
                 List<Long> listaFechas = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                   // String name = snapshot.child("fechaActivacionAlarma").getValue(String.class);
-                    Log.d("TAG", snapshot.getKey()+"");
+
                     if(snapshot.getKey().toString().equals("estadoAlarma")){
                         estadoAlarma = Integer.parseInt(snapshot.getValue()+"");
-                        Log.d("TAG", snapshot.getValue()+"");
                     }else{
                         String partOfLong = (snapshot.getValue().toString());
                         partOfLong =  partOfLong.substring(partOfLong .indexOf("{")+1,partOfLong.length()-1);
@@ -110,7 +110,7 @@ public class AlarmsFragment extends Fragment implements View.OnClickListener {
                             str = str.substring(str.indexOf("=")+1,str.length());
                             long time = Long.parseLong(str);
                             listAlarmas.add(time);
-                            Log.d("TAG", time+"");
+                            Log.d("TAGTIME", time+"");
                         }
                     }
                 }

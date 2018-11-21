@@ -75,10 +75,10 @@ int static DELAY_UNTIL_OPEN_DOOR = 5000;
 uint8_t static ENCENDIDO = HIGH;
 uint8_t static APAGADO = LOW;
 /**SENSOR_PIR**/
-SensorMovimiento sensorUno(HIGH,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO,0);
-SensorMovimiento sensorDos(HIGH,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS,0);
-SensorMovimiento sensorTres(HIGH,"SENSOR TRES",SENSOR_MOVIMIENTO_TRES,0);
-SensorMovimiento sensorCocina(HIGH,"SENSOR COCINA",SENSOR_MOVIMIENTO_COCINA,0);
+SensorMovimiento sensorUno(LOW,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO,0);
+SensorMovimiento sensorDos(LOW,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS,0);
+SensorMovimiento sensorTres(LOW,"SENSOR TRES",SENSOR_MOVIMIENTO_TRES,0);
+SensorMovimiento sensorCocina(LOW,"SENSOR COCINA",SENSOR_MOVIMIENTO_COCINA,0);
 /**SENSOR TEMPERATURA - HUMEDAD**/
 DHT dht(SENSOR_TEMPERATURA, DHTTYPE);
 /**BUZZER**/
@@ -104,7 +104,18 @@ boolean paint = true;
 int state;
 int alarmCount =1;
 char c;
-char varCharBluetooth;    
+char varCharBluetooth;  
+
+uint8_t pirUno = LOW;
+uint8_t pirDos = LOW;
+uint8_t pirTres = LOW;
+uint8_t pirCuatro = LOW;
+
+
+boolean readPirUno = true;
+boolean readPirDos = true;
+boolean readPirTres = true;
+boolean readPirCuatro = true;
 //=========================================
 //== SETUP PROYECT
 //=========================================
@@ -140,7 +151,7 @@ void loop() {
       tft_s.fan();
       tft_s.setStateFan(true);
    }  
-  
+  //moventSensors_dos();
     movementSensors();
     
 }
@@ -280,6 +291,8 @@ boolean checkRead(float value){
      temperatura= readTemperatureAsCelcius(dht);
     Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
     bluetooth.updatePersonaAndTemp("1", temperatura);
+    delay(1000);
+    bluetooth.updatePersonaAndTemp("0", temperatura);
    }
    if(sensorDos.activacionSensor()){
      temperatura= readTemperatureAsCelcius(dht);
@@ -295,10 +308,75 @@ boolean checkRead(float value){
      temperatura= readTemperatureAsCelcius(dht);
     Serial.println(sensorCocina.getIdSensor()+" ACTIVADO");
     bluetooth.updatePersonaAndTemp("4", temperatura);
-   }
-
- 
+   
+   } 
  }
+
+ void moventSensors_dos(){
+   float temperatura=0;
+  pirUno = digitalRead(SENSOR_MOVIMIENTO_UNO);
+  pirDos = digitalRead(SENSOR_MOVIMIENTO_DOS);
+  pirTres = digitalRead(SENSOR_MOVIMIENTO_TRES);
+  pirCuatro = digitalRead(SENSOR_MOVIMIENTO_COCINA);
+  Serial.print(pirUno);
+  Serial.print("--");
+  Serial.print(pirDos);
+  Serial.print("--");
+  Serial.print(pirTres);
+  Serial.print("--");
+  Serial.print(pirCuatro);
+  Serial.println();
+  if(readPirUno){
+      if(pirUno == HIGH){
+         temperatura= readTemperatureAsCelcius(dht);
+          Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
+          bluetooth.updatePersonaAndTemp("1", temperatura);
+          delay(1000);
+          bluetooth.updatePersonaAndTemp("0", temperatura);
+        readPirUno = false;
+      }
+  }
+  if(pirUno  == LOW ){
+    readPirUno = true;
+  }
+
+   if(readPirDos){
+      if(pirDos == HIGH){
+         temperatura= readTemperatureAsCelcius(dht);
+         Serial.println(sensorDos.getIdSensor()+" ACTIVADO");
+         bluetooth.updatePersonaAndTemp("2", temperatura);
+        readPirDos = false;
+      }
+  }
+  if(pirDos  == LOW){
+    readPirDos = true;
+  }
+
+   if(readPirTres ){
+      if(pirTres == HIGH){
+         temperatura= readTemperatureAsCelcius(dht);
+         Serial.println(sensorTres.getIdSensor()+" ACTIVADO");
+         bluetooth.updatePersonaAndTemp("3", temperatura);
+        readPirTres = false;
+      }
+  }
+  if(pirTres == LOW){
+    readPirTres = true;
+  }
+
+   if(readPirCuatro){
+      if(pirCuatro == HIGH){
+           temperatura= readTemperatureAsCelcius(dht);
+          Serial.println(sensorCocina.getIdSensor()+" ACTIVADO");
+          bluetooth.updatePersonaAndTemp("4", temperatura);
+        readPirCuatro = false;
+      }
+  }
+  if(pirCuatro == LOW){
+    readPirCuatro = true;
+  }
+ }
+
   
 //=========================================
 //== UTILS

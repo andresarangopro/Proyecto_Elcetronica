@@ -15,6 +15,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static com.example.hp.appelectr.Util.getDate;
+
 public class RAAlarmas extends RecyclerView.Adapter<RAAlarmas.ViewAlarmas> {
 
     public static class ViewAlarmas extends RecyclerView.ViewHolder{
@@ -49,12 +51,6 @@ public class RAAlarmas extends RecyclerView.Adapter<RAAlarmas.ViewAlarmas> {
         long time = listAlarmas.get(position);
         holder.tvAlarma.setText(getDate((time+18000)*1000));//getDate(alarma.getFechaActivacionAlarma().get(position)));
 
-    }
-    private String getDate(long time) {
-        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis(time);
-        String date = DateFormat.format("dd-MM-yyyy hh:mm:ss a", cal).toString();
-        return date;
     }
 
     @Override

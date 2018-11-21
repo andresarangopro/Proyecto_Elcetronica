@@ -81,41 +81,37 @@ public class PersonasFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listTimes = new ArrayList<>();
                 int estadoAlarma = 0;
-                List<Long> listaFechas = new ArrayList<>();
                 Persona persona;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // String name = snapshot.child("fechaActivacionAlarma").getValue(String.class);
-                    Log.d("TAGPRS", snapshot.getKey()+"");
+                    List<Long> listaFechas = new ArrayList<>();
+                    Log.d("TAGPRS", snapshot.getKey() + "");
                     persona = new Persona();
-                    for (DataSnapshot contentPersonas:snapshot.getChildren()){
-                        Log.d("TAGPRS", contentPersonas.getKey()+"");
+                    for (DataSnapshot contentPersonas : snapshot.getChildren()) {
+                        Log.d("TAGPRS", contentPersonas.getKey() + "");
                         String key = contentPersonas.getKey().toString();
-                        if(key.equals("born")){
+                        if (key.equals("born")) {
                             persona.setBorn(contentPersonas.getValue().toString());
-                        }else if(key.equals("key")){
+                        } else if (key.equals("key")) {
                             persona.setKeyHouse(contentPersonas.getValue().toString());
-                        }else if(key.equals("nombre")){
+                        } else if (key.equals("nombre")) {
                             persona.setNombre(contentPersonas.getValue().toString());
-                        }else if(key.equals("prom")){
-                            persona.setPromHoraEntrada(Long.parseLong(contentPersonas.getValue().toString()));
-                        }else{
-
+                        } else if (key.equals("prom")) {
+                            persona.setPromHoraEntrada(contentPersonas.getValue().toString());
+                        } else {
+                            String partOfLong = (contentPersonas.getValue().toString());
+                            partOfLong = partOfLong.substring(partOfLong.indexOf("{") + 1, partOfLong.length() - 1);
+                            String[] part = partOfLong.split(",");
+                            for (String str : part) {
+                                str = str.substring(str.indexOf("=") + 1, str.length());
+                                long time = Long.parseLong(str);
+                                listaFechas.add(time);
+                                Log.d("TAGTPERS", time + "");
+                            }
+                            persona.setFechaEntradConHora(listaFechas);
                         }
                     }
                     listPersonas.add(persona);
-//                    else{
-//                        String partOfLong = (snapshot.getValue().toString());
-//                        partOfLong =  partOfLong.substring(partOfLong .indexOf("{")+1,partOfLong.length()-1);
-//                        String[] part = partOfLong.split(",");
-//                        for (String str:part){
-//                            str = str.substring(str.indexOf("=")+1,str.length());
-//                            long time = Long.parseLong(str);
-//                            listaFechas.add(time);
-//                            Log.d("TAG", time+"");
-//                        }
-//                    }
                 }
-                //alarmaF = new Alarma(listAlarmas,estadoAlarma);
                 try {
                     setRecycler();
                 } catch (IOException e) {
