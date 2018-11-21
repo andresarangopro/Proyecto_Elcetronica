@@ -143,15 +143,19 @@ void loop() {
      tft_s.funMenu();
      tft_s.setState(false);
    }
-   if(tft_s.pressure(20, 220, 70, 120)){
-        tft_s.light();
-        tft_s.setStateFan(true);
+   if(tft_s.pressure(20, 220, 200, 240)){
+      tft_s.temperature();
+      tft_s.setStateFan(true);
+   }
+   if(tft_s.pressure(20, 220, 150, 190)){
+      tft_s.light();
+      tft_s.setStateFan(true);
    } 
-   if(tft_s.pressure(20, 220, 40, 80)){
+   if(tft_s.pressure(20, 220, 70, 120)){
       tft_s.fan();
       tft_s.setStateFan(true);
-   }  
-  //moventSensors_dos();
+   }
+  
     movementSensors();
     
 }
@@ -312,70 +316,6 @@ boolean checkRead(float value){
    } 
  }
 
- void moventSensors_dos(){
-   float temperatura=0;
-  pirUno = digitalRead(SENSOR_MOVIMIENTO_UNO);
-  pirDos = digitalRead(SENSOR_MOVIMIENTO_DOS);
-  pirTres = digitalRead(SENSOR_MOVIMIENTO_TRES);
-  pirCuatro = digitalRead(SENSOR_MOVIMIENTO_COCINA);
-  Serial.print(pirUno);
-  Serial.print("--");
-  Serial.print(pirDos);
-  Serial.print("--");
-  Serial.print(pirTres);
-  Serial.print("--");
-  Serial.print(pirCuatro);
-  Serial.println();
-  if(readPirUno){
-      if(pirUno == HIGH){
-         temperatura= readTemperatureAsCelcius(dht);
-          Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
-          bluetooth.updatePersonaAndTemp("1", temperatura);
-          delay(1000);
-          bluetooth.updatePersonaAndTemp("0", temperatura);
-        readPirUno = false;
-      }
-  }
-  if(pirUno  == LOW ){
-    readPirUno = true;
-  }
-
-   if(readPirDos){
-      if(pirDos == HIGH){
-         temperatura= readTemperatureAsCelcius(dht);
-         Serial.println(sensorDos.getIdSensor()+" ACTIVADO");
-         bluetooth.updatePersonaAndTemp("2", temperatura);
-        readPirDos = false;
-      }
-  }
-  if(pirDos  == LOW){
-    readPirDos = true;
-  }
-
-   if(readPirTres ){
-      if(pirTres == HIGH){
-         temperatura= readTemperatureAsCelcius(dht);
-         Serial.println(sensorTres.getIdSensor()+" ACTIVADO");
-         bluetooth.updatePersonaAndTemp("3", temperatura);
-        readPirTres = false;
-      }
-  }
-  if(pirTres == LOW){
-    readPirTres = true;
-  }
-
-   if(readPirCuatro){
-      if(pirCuatro == HIGH){
-           temperatura= readTemperatureAsCelcius(dht);
-          Serial.println(sensorCocina.getIdSensor()+" ACTIVADO");
-          bluetooth.updatePersonaAndTemp("4", temperatura);
-        readPirCuatro = false;
-      }
-  }
-  if(pirCuatro == LOW){
-    readPirCuatro = true;
-  }
- }
 
   
 //=========================================
