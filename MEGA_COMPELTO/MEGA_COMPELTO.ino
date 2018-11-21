@@ -132,14 +132,18 @@ void loop() {
      tft_s.funMenu();
      tft_s.setState(false);
    }
-   if(tft_s.pressure(20, 220, 70, 120)){
-        tft_s.light();
-        tft_s.setStateFan(true);
+   if(tft_s.pressure(20, 220, 200, 240)){
+      tft_s.temperature();
+      tft_s.setStateFan(true);
+   }
+   if(tft_s.pressure(20, 220, 150, 190)){
+      tft_s.light();
+      tft_s.setStateFan(true);
    } 
-   if(tft_s.pressure(20, 220, 40, 80)){
+   if(tft_s.pressure(20, 220, 70, 120)){
       tft_s.fan();
       tft_s.setStateFan(true);
-   }  
+   }
   
     movementSensors();
     

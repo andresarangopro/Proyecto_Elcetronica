@@ -57,6 +57,7 @@ class TftMine{
       DigitalWObject fanUnoObj;
       DigitalWObject fanDosObj;
       DigitalWObject celda;
+      DigitalWObject DHTSala;
       
       boolean entroFan;
       
@@ -64,7 +65,8 @@ class TftMine{
        boolean entroMenu;
       TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj
       ,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, 
-        DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj, DigitalWObject nCelda){    
+        DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj, 
+        DigitalWObject nCelda, DigitalWObject nDHTSala){    
            
         ledUnoObj = nledUnoObj;
         ledDosObj = nledDosObj;
@@ -74,6 +76,7 @@ class TftMine{
         fanUnoObj = nfanUnoObj;
         fanDosObj = nfanDosObj;
         celda = nCelda;
+        DHTSala = nDHTSala;
         entroMenu = true;
         entroFan = true;
       }    
@@ -103,42 +106,14 @@ class TftMine{
       
         drawText(75, 10, "Menu", RED, 3);
   
-        tft.drawRect(40, 60, 160, 40, RED);
-        drawText(55, 75, "Temperatura", BLACK, 2);
+        tft.drawRect(40, 80, 160, 50, RED);
+        drawText(55, 95, "Temperatura", BLACK, 2);
       
-        tft.drawRect(40, 120, 160, 40, RED);
-        drawText(70, 132, "Personas", BLACK, 2);
+        tft.drawRect(40, 150, 160, 50, RED);
+        drawText(75, 165, "Luces", BLACK, 2);
       
-        tft.drawRect(40, 180, 160, 40, RED);  
-        drawText(90, 192, "Luces", BLACK, 2);
-      
-        tft.drawRect(40, 240, 160, 40, RED);  
-        drawText(60, 255, "Ventilador", BLACK, 2);
-       
-       // funTFT();
-      }
-
-      void funTFT(){     
-        if(pressure(20, 220, 220, 260)){
-
-//          temperature();
-        }
-        if(pressure(20, 220, 160, 200)){
-         // people();
-
-          //temperature();
-        }
-        if(pressure(20, 220, 160, 200)){
-          //people();
-
-        }
-        if(pressure(20, 220, 100, 140)){
-          light();
-        }
-        if(pressure(20, 220, 40, 80)){
-          setState(true);
-          fan();
-        } 
+        tft.drawRect(40, 220, 160, 50, RED);  
+        drawText(90, 235, "Ventilador", BLACK, 2);
       }
 
       boolean pressure(int x1, int x2, int y1, int y2){  
@@ -155,6 +130,44 @@ class TftMine{
         tft.setTextColor(color);
         tft.setTextSize(siz);
         tft.print(nameText);
+      }
+
+      void temperature(){
+        tft.fillScreen(BLACK);
+      
+        drawText(20, 5, "Temperatura", RED, 3);
+        
+        drawText(20, 45, "Sala: ", CYAN, 2);
+        tft.print(DHTSala);
+      
+        /*drawText(20, 85, "Pieza 1: ", CYAN, 2);
+        tft.print("31 C");
+      
+        drawText(20, 125, "Pieza 2: ", CYAN, 2);
+        tft.print("32 C");
+      
+        drawText(20, 165, "Pieza 3: ", CYAN, 2);
+        tft.print("31 C");
+      
+        drawText(20, 205, "Pieza 4: ", CYAN, 2);
+        tft.print("30 C");*/
+      
+        tft.drawRect(20, 250, 100, 50, RED);
+        drawText(45, 265, "Menu", CYAN, 2);
+      
+        tft.drawRect(130, 250, 100, 50, RED);
+        drawText(145, 265, "Update", CYAN, 2);
+      
+        while(entroFan){
+          if(pressure(20, 120, 20, 70)){
+            funMenu();
+            setStateFan(false);
+          }
+          if(pressure(130, 230, 20, 70)){
+            temperature();
+            setStateFan(false);
+          }
+        }
       }
 
       void light(){
