@@ -144,7 +144,8 @@ void loop() {
      tft_s.setState(false);
    }
    if(tft_s.pressure(20, 220, 200, 240)){
-      tft_s.temperature();
+      float temp = readTemperatureAsCelcius(dht);
+      tft_s.temperature(temp);
       tft_s.setStateFan(true);
    }
    if(tft_s.pressure(20, 220, 150, 190)){
@@ -156,6 +157,7 @@ void loop() {
       tft_s.setStateFan(true);
    }
   
+  //moventSensors_dos();
     movementSensors();
     
 }
@@ -315,7 +317,6 @@ boolean checkRead(float value){
    
    } 
  }
-
 
   
 //=========================================

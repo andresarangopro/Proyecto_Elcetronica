@@ -1,6 +1,7 @@
 #include <MCUFRIEND_kbv.h>
 #include <TouchScreen.h>
 #include <Adafruit_GFX.h>
+#include <DHT.h>
 MCUFRIEND_kbv tft;
 
 #define BLACK 0x0000
@@ -57,7 +58,6 @@ class TftMine{
       DigitalWObject fanUnoObj;
       DigitalWObject fanDosObj;
       DigitalWObject celda;
-      DigitalWObject DHTSala;
       
       boolean entroFan;
       
@@ -66,7 +66,7 @@ class TftMine{
       TftMine(DigitalWObject nledUnoObj,DigitalWObject nledDosObj,DigitalWObject nledTresObj
       ,DigitalWObject nledCuatroObj,DigitalWObject nledCincoObj, 
         DigitalWObject nfanUnoObj,DigitalWObject nfanDosObj, 
-        DigitalWObject nCelda, DigitalWObject nDHTSala){    
+        DigitalWObject nCelda){    
            
         ledUnoObj = nledUnoObj;
         ledDosObj = nledDosObj;
@@ -76,7 +76,6 @@ class TftMine{
         fanUnoObj = nfanUnoObj;
         fanDosObj = nfanDosObj;
         celda = nCelda;
-        DHTSala = nDHTSala;
         entroMenu = true;
         entroFan = true;
       }    
@@ -110,10 +109,10 @@ class TftMine{
         drawText(55, 95, "Temperatura", BLACK, 2);
       
         tft.drawRect(40, 150, 160, 50, RED);
-        drawText(75, 165, "Luces", BLACK, 2);
+        drawText(90, 165, "Luces", BLACK, 2);
       
         tft.drawRect(40, 220, 160, 50, RED);  
-        drawText(90, 235, "Ventilador", BLACK, 2);
+        drawText(60, 235, "Ventilador", BLACK, 2);
       }
 
       boolean pressure(int x1, int x2, int y1, int y2){  
@@ -132,25 +131,13 @@ class TftMine{
         tft.print(nameText);
       }
 
-      void temperature(){
+      void temperature(float DHTSala){
         tft.fillScreen(BLACK);
       
         drawText(20, 5, "Temperatura", RED, 3);
         
-        drawText(20, 45, "Sala: ", CYAN, 2);
+        drawText(20, 45, "Casa: ", CYAN, 2);
         tft.print(DHTSala);
-      
-        /*drawText(20, 85, "Pieza 1: ", CYAN, 2);
-        tft.print("31 C");
-      
-        drawText(20, 125, "Pieza 2: ", CYAN, 2);
-        tft.print("32 C");
-      
-        drawText(20, 165, "Pieza 3: ", CYAN, 2);
-        tft.print("31 C");
-      
-        drawText(20, 205, "Pieza 4: ", CYAN, 2);
-        tft.print("30 C");*/
       
         tft.drawRect(20, 250, 100, 50, RED);
         drawText(45, 265, "Menu", CYAN, 2);
@@ -164,7 +151,7 @@ class TftMine{
             setStateFan(false);
           }
           if(pressure(130, 230, 20, 70)){
-            temperature();
+            temperature(DHTSala);
             setStateFan(false);
           }
         }
