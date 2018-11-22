@@ -1,11 +1,7 @@
 //=========================================
 //== INCLUDES
 //=========================================
-
-/** TFT */
-#include <MCUFRIEND_kbv.h>
-#include <TouchScreen.h>
-#include <Adafruit_GFX.h>
+#include <SoftwareSerial.h>
 /**RFID**/
 #include <SPI.h>
 #include <MFRC522.h>
@@ -20,6 +16,11 @@
 #include <DHT.h>
 /**Objects an ouput**/
 #include "DigitalWObject.h"
+/**BLUETOOTH**/
+#include "ManagementBluetooth.h"
+/**TFT**/
+#include "TftMine.h"
+
 //=========================================
 //== DEFINES
 //=========================================
@@ -27,34 +28,30 @@
 #define SS_PIN 53
 #define RST_PIN 49
 /**SERVO**/
-#define SERVO_PIN 40
-/**COOLER**/
-#define COOLER_UNO 49
+#define SERVO_PIN 44
 /**SENSOR PIR**/
-#define SENSOR_MOVIMIENTO_UNO 4
-#define SENSOR_MOVIMIENTO_DOS 5
+#define SENSOR_MOVIMIENTO_UNO 38
+#define SENSOR_MOVIMIENTO_DOS 34
+#define SENSOR_MOVIMIENTO_COCINA 40
+#define SENSOR_MOVIMIENTO_TRES 36
 /**SENSOR TEMPERATURA - HUMEDAD**/
-#define SENSOR_TEMPERATURA 46
+#define SENSOR_TEMPERATURA 23//46
 #define DHTTYPE DHT11
 /**BUZZER**/
-#define BUZZER 48
+#define BUZZER 45//48
 /**LEDS**/
-#define LED_COCINA 47
-
-/** TFT **/
-MCUFRIEND_kbv tft;
-
-#define BLACK 0x0000
-#define RED 0xF800 
-#define CYAN 0x07FF 
-
-#define YP A2  
-#define XM A1
-#define YM 6 
-#define XP 7
-
-#define MINPRESSURE 1 
-#define MAXPRESSURE 1000
+#define LED_SALA 22
+#define LED_CUARTO_UNO 24
+#define LED_CUARTO_DOS 26
+#define LED_CUARTO_TRES 28
+#define LED_COCINA 30
+/**COOLER**/
+#define COOLER_UNO 49
+/**VENTILADOR**/
+#define FAN_UNO 32
+#define FAN_DOS 33
+/**CELDA**/
+#define CELDA_PIN 35
 
 //=========================================
 //== VARIABLES
@@ -72,9 +69,15 @@ int Y;
 int Z;
 /**RFID**/
 int static KEY_MASTER_CARD[] = {131,221,251,36}; //This is the stored UID
+int static KEY_MASTER_CARD2[] = {194,104,236,115};
+const int arrayKeys[][4] = {{131,221,251,36},{194,104,236,115}};
+int filasKeys = 2;
+int columnasKeys = 4;
 MFRC522 rfid(SS_PIN, RST_PIN); // Instance of the class
 /**LCD**/
 LiquidCrystal_I2C lcd(0x3F,16,2);  //
+/**BLUETOOTH**/
+ManagementBluetooth bluetooth(10,11);
 /**SERVO**/
 Servo ServoPuerta; 
 int static CERO_GRADES = 0;
@@ -83,8 +86,10 @@ int static DELAY_UNTIL_OPEN_DOOR = 5000;
 uint8_t static ENCENDIDO = HIGH;
 uint8_t static APAGADO = LOW;
 /**SENSOR_PIR**/
-SensorMovimiento sensorUno(HIGH,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO);
-SensorMovimiento sensorDos(HIGH,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS);
+SensorMovimiento sensorUno(LOW,"SENSOR UNO",SENSOR_MOVIMIENTO_UNO,0);
+SensorMovimiento sensorDos(LOW,"SENSOR DOS",SENSOR_MOVIMIENTO_DOS,0);
+SensorMovimiento sensorTres(LOW,"SENSOR TRES",SENSOR_MOVIMIENTO_TRES,0);
+SensorMovimiento sensorCocina(LOW,"SENSOR COCINA",SENSOR_MOVIMIENTO_COCINA,0);
 /**SENSOR TEMPERATURA - HUMEDAD**/
 DHT dht(SENSOR_TEMPERATURA, DHTTYPE);
 /**BUZZER**/
@@ -92,9 +97,36 @@ DigitalWObject buzzer(BUZZER, APAGADO, "BUZZER");
 /**COOLER**/
 DigitalWObject cooler(COOLER_UNO, APAGADO, "COOLER_UNO");
 /**LEDS**/
-DigitalWObject led_cocina(LED_COCINA,APAGADO, "LED COCINA");
+DigitalWObject led_cocinaD(LED_COCINA,APAGADO, "LED COCINA");
+DigitalWObject led_salaD(LED_SALA,APAGADO, "LED SALA");
+DigitalWObject led_cuartoUno(LED_CUARTO_UNO,APAGADO, "LED CUARTO UNO");
+DigitalWObject led_cuartoDos(LED_CUARTO_DOS,APAGADO, "LED CUARTO DOS");
+DigitalWObject led_cuartoTres(LED_CUARTO_TRES,APAGADO, "LED CUARTO TRES");
+/**VENTILADORES**/
+DigitalWObject fan_uno(FAN_UNO, APAGADO, "VENTILADOR UNO");
+DigitalWObject fan_dos (FAN_DOS, APAGADO, "VENTILADOR UNO");
+/**CELDA**/
+DigitalWObject celda(CELDA_PIN, APAGADO, "CELDA");
+/**TFT**/
+TftMine tft_s(led_cocinaD,led_salaD,led_cuartoUno, led_cuartoDos, led_cuartoTres, fan_uno, fan_dos,celda);
+boolean paint = true;
+
+
 int state;
+int alarmCount =1;
 char c;
+char varCharBluetooth;  
+
+uint8_t pirUno = LOW;
+uint8_t pirDos = LOW;
+uint8_t pirTres = LOW;
+uint8_t pirCuatro = LOW;
+
+
+boolean readPirUno = true;
+boolean readPirDos = true;
+boolean readPirTres = true;
+boolean readPirCuatro = true;
 //=========================================
 //== SETUP PROYECT
 //=========================================
@@ -103,11 +135,12 @@ void setup() {
     Serial.begin(9600);
     
     SPI.begin(); // Init SPI bus
+    bluetooth.beginT();
+    tft_s.initTFT();
     initRFID();
     initi2cLCD();  
     initServo();
-    dht.begin();
-    initTFT();
+    dht.begin();  
 }
 //=========================================
 //== LOOP PROYECT
@@ -115,12 +148,30 @@ void setup() {
 
 void loop() {
    readCardRFID();  
-   sensorUno.getStateOnce();
-   sensorDos.getStateOnce();
-   funTFT(); 
+   varCharBluetooth= bluetooth.readT();
+   bluetooth.connectB(varCharBluetooth,led_salaD,led_cuartoUno,led_cuartoDos,led_cuartoTres,led_cocinaD,buzzer,fan_uno, fan_dos, celda);
+   if(tft_s.entroMenu){
+     tft_s.funMenu();
+     tft_s.setState(false);
+   }
+   if(tft_s.pressure(20, 220, 200, 240)){
+      float temp = readTemperatureAsCelcius(dht);
+      tft_s.temperature(temp);
+      tft_s.setStateFan(true);
+   }
+   if(tft_s.pressure(20, 220, 150, 190)){
+      tft_s.light();
+      tft_s.setStateFan(true);
+   } 
+   if(tft_s.pressure(20, 220, 70, 120)){
+      tft_s.fan();
+      tft_s.setStateFan(true);
+   }
   
+  //moventSensors_dos();
+    movementSensors();
+    
 }
-
 
 //=========================================
 //==RFID MODULO 
@@ -138,7 +189,7 @@ void readCardRFID(){
       printSerialCard(serialCard);
       printSerialCardOnLCD(serialCard);
       boolean isMasterKey = compareCardReadWithMasterCard(cardSerialReadVar);
-      openDoor(isMasterKey);
+      openDoor(isMasterKey,serialCard);
     } 
 }
 
@@ -161,11 +212,16 @@ String serialCardToString(MFRC522::Uid cardSerial){
 
 boolean compareCardReadWithMasterCard(MFRC522::Uid cardSerial){
     boolean match = true;
-    for (byte i = 0; i < cardSerial.size; i++) {
-      if(!(cardSerial.uidByte[i] == KEY_MASTER_CARD[i])){
-        match = false;
-      }  
-    }
+  //  for (byte i = 0; i < cardSerial.size; i++) {  
+    for(int i =0; i < filasKeys; i++){      
+      match = true;
+      for(int j =0; j < columnasKeys; j++){   
+        if(!(cardSerial.uidByte[j] == arrayKeys[i][j])){      
+          match = false;
+        }  
+      }
+      if(match)return match;
+     }
     return match;
 }
 
@@ -261,13 +317,16 @@ void moveServo(int grade){
    ServoPuerta.write(90); 
 }
 
-void openDoor(int correctMasterKey){
+void openDoor(int correctMasterKey,String cardSerialReadVar){
   if(correctMasterKey){
+     bluetooth.sendKeyPersona(cardSerialReadVar);    
      moveServo(180); 
-  }else{
+  }else if(alarmCount >= 3){       
     buzzer.setEstado(ENCENDIDO);
-    delay(2000);
-    buzzer.setEstado(APAGADO);
+    bluetooth.insertAlarm();  
+    alarmCount = 0;
+  }else{ 
+     alarmCount++;
   }
 }
 
@@ -280,7 +339,7 @@ float readHumidity(DHT dht){
 }
 
 float readTemperatureAsCelcius(DHT dht){
-  delay(1000);
+  delay(2000);
   return dht.readTemperature();
 }
 
@@ -296,6 +355,38 @@ boolean checkRead(float value){
   return isnan(value) ? false : true;
 }
 
+//=========================================
+//== SENSOR MOVIMIENTO
+//=========================================
+
+ void movementSensors(){
+      float temperatura=0;
+  if(sensorUno.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorUno.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("1", temperatura);
+    delay(1000);
+    bluetooth.updatePersonaAndTemp("0", temperatura);
+   }
+   if(sensorDos.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+     Serial.println(sensorDos.getIdSensor()+" ACTIVADO");
+     bluetooth.updatePersonaAndTemp("2", temperatura);
+   }
+   if(sensorTres.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorTres.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("3", temperatura);
+   }
+   if(sensorCocina.activacionSensor()){
+     temperatura= readTemperatureAsCelcius(dht);
+    Serial.println(sensorCocina.getIdSensor()+" ACTIVADO");
+    bluetooth.updatePersonaAndTemp("4", temperatura);
+   
+   } 
+ }
+
+  
 //=========================================
 //== UTILS
 //=========================================

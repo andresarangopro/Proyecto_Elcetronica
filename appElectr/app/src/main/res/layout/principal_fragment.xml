@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Fragments.PrincipalFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:orientation="vertical">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:src="@drawable/ic_rooms"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:text="Habitaciones"
+                android:id="@+id/btnHabitaciones"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="HABITACIONES"
+                android:textSize="18dp"
+                android:textColor="@color/colorYellow"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:orientation="vertical">
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:src="@drawable/ic_red"
+                android:scaleType="fitCenter"
+                android:background="@null"
+                android:text="Habitaciones"
+                android:id="@+id/btnPersonas"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.2"
+                android:text="PERSONAS"
+                android:textSize="18dp"
+                android:textColor="@color/colorYellow"
+                android:textAlignment="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:src="@drawable/ic_alarms"
+            android:scaleType="fitCenter"
+            android:background="@null"
+            android:text="Habitaciones"
+            android:id="@+id/btnAlarms"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:text="ALARMAS"
+            android:textSize="18dp"
+            android:textColor="@color/colorYellow"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="0.2"
+           android:background="@drawable/rv_with_border_gray"
+           android:orientation="horizontal">
+
+           <ImageButton
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="0.2"
+               android:src="@drawable/refresh"
+               android:scaleType="fitCenter"
+
+               android:background="@null"
+               android:id="@+id/btnRefreshHab"/>
+
+           <ImageButton
+              android:layout_width="0dp"
+              android:layout_height="match_parent"
+              android:layout_weight="0.2"
+              android:background="@null"
+              android:src="@drawable/ic_bluetooth_off"
+              android:scaleType="fitCenter"
+              android:id="@+id/IdDesconectar"/>
+
+
+      </LinearLayout>
+
+   </LinearLayout>
+
+</LinearLayout>

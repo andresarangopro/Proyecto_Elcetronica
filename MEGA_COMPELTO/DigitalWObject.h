@@ -24,6 +24,8 @@ class DigitalWObject{
         pinMode(pin,OUTPUT);
     }
 
+     DigitalWObject(){}
+
     int getPin(){
       return pin;
     }
@@ -47,6 +49,14 @@ class DigitalWObject{
 
     void setDsName(String newDsName){
       dsName = newDsName;
+    }
+
+     void changeToOppositeState(){
+      if(estado == LOW){
+        setEstado(HIGH);
+      }else{
+        setEstado(LOW);
+      }
     }
 
 };
